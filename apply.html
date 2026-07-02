@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Registration | Taste of the Danforth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Blueprint -->
+  <header class="danforth-header">
+    <div class="brand-title">
+      <h1>GREEKTOWN</h1>
+      <p>Taste of the Danforth 2026</p>
+    </div>
+    <nav class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Art & Events</a>
+      <a href="#" class="active">Vendor Applications</a>
+    </nav>
+  </header>
+
+  <!-- Split Panel Core Architecture -->
+  <main class="split-container">
+    
+    <!-- Left Informational Hub -->
+    <section class="info-panel">
+      <span class="badge">Open Admissions</span>
+      <h2 class="display-title">Street Footprint Allocation Engine</h2>
+      <p style="line-height: 1.6; color: #475569;">
+        Select your required physical presence footprint below. Applications route into our isolated database architecture to reserve space on the Danforth street grid.
+      </p>
+
+      <div class="tier-toggle-stack">
+        <div class="toggle-card active" id="mode-popup">
+          <h4>Standard Pop-up / Artisan Unit</h4>
+          <p>For independent merchandise vendors, street artists, and retail brands.</p>
+        </div>
+        <div class="toggle-card" id="mode-truck">
+          <h4>Mobile Food Truck Rig</h4>
+          <p>For heavy concessions requiring custom layout clearances and high-power hydro integration.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Interaction Form -->
+    <section class="form-panel">
+      <div class="app-card">
+        <h3 style="margin-bottom: 25px; font-weight: 900; font-size: 1.4rem;" id="form-title">Pop-up Plot Allocation</h3>
+        
+        <form id="danforth-application-form">
+          <div class="input-group">
+            <label>Business / Concept Title</label>
+            <input type="text" id="vendor-name" class="form-input" placeholder="e.g., Athenian Street Treats" required>
+          </div>
+
+          <div class="input-group">
+            <label>Contact Email</label>
+            <input type="email" id="vendor-email" class="form-input" placeholder="management@brand.com" required>
+          </div>
+
+          <div class="input-group">
+            <label>Footprint Size Preference</label>
+            <select id="vendor-tier" class="form-input" required>
+              <option value="1200">Standard Footprint — 10' x 10' ($1,200.00)</option>
+              <option value="2400">Expanded Footprint — 10' x 20' ($2,400.00)</option>
+              <option value="4800">Large Marketplace Block — 20' x 20' ($4,800.00)</option>
+            </select>
+          </div>
+
+          <!-- Price Display Output Card -->
+          <div class="summary-invoice">
+            <h5>Required Fee:</h5>
+            <div class="price" id="invoice-total">$1,200.00</div>
+          </div>
+
+          <button type="submit" class="submit-btn">Submit Application Structure</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const modePopup = document.getElementById('mode-popup');
+    const modeTruck = document.getElementById('mode-truck');
+    const formTitle = document.getElementById('form-title');
+    const vendorTier = document.getElementById('vendor-tier');
+    const invoiceTotal = document.getElementById('invoice-total');
+
+    // Manage Switch Transformations
+    modePopup.addEventListener('click', () => {
+      modePopup.classList.add('active');
+      modeTruck.classList.remove('active');
+      formTitle.innerText = "Pop-up Plot Allocation";
+      
+      vendorTier.innerHTML = `
+        <option value="1200">Standard Footprint — 10' x 10' ($1,200.00)</option>
+        <option value="2400">Expanded Footprint — 10' x 20' ($2,400.00)</option>
+        <option value="4800">Large Marketplace Block — 20' x 20' ($4,800.00)</option>
+      `;
+      invoiceTotal.innerText = "$1,200.00";
+    });
+
+    modeTruck.addEventListener('click', () => {
+      modeTruck.classList.add('active');
+      modePopup.classList.remove('active');
+      formTitle.innerText = "Mobile Concession Assignment";
+      
+      vendorTier.innerHTML = `
+        <option value="1850">Standard Truck Slot (Hydro Hookup) ($1,850.00)</option>
+        <option value="3500">Premium Intersection Plot ($3,500.00)</option>
+      `;
+      invoiceTotal.innerText = "$1,850.00";
+    });
+
+    // Update Totals on Select Change
+    vendorTier.addEventListener('change', () => {
+      const numericValue = Number(vendorTier.value);
+      invoiceTotal.innerText = `$${numericValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    });
+  </script>
+</body>
+</html>

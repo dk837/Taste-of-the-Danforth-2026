@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taste of the Danforth 2026 | Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Load FontAwesome for the clean social icon rendering matching image_a26ead.png -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- 🔥 STEP 1: FIREBASE COMPATIBILITY LIBRARIES -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* HERO DESIGN FROM Screenshot 2026-07-02 222512.jpg */
+    .flavours-hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+                  url('https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      min-height: 450px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .flavours-overlay-box {
+      background: rgba(0, 0, 0, 0.5);
+      width: 100%;
+      padding: 40px 20px;
+    }
+
+    .flavours-text {
+      font-family: 'Montserrat', sans-serif;
+      color: white;
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .flavours-text span.big-word {
+      font-size: 4.8rem;
+      display: block;
+      font-weight: 900;
+      margin: -5px 0;
+    }
+
+    @media (max-width: 768px) {
+      .flavours-text { font-size: 1.5rem; }
+      .flavours-text span.big-word { font-size: 3rem; }
+    }
+
+    /* DYNAMIC APP VIEW CONTROLLERS */
+    .dynamic-view-panel {
+      display: none;
+    }
+    .dynamic-view-panel.view-active {
+      display: block;
+    }
+
+    /* ABOUT US VIEWS FROM image_a1efe5.jpg */
+    .about-flag-banner {
+      width: 100%;
+      height: 320px;
+      background: url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center 30%;
+    }
+
+    .about-main-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 50px 20px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .about-bracket-header {
+      font-size: 1.8rem;
+      color: #0056b3;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .about-lead-p {
+      font-size: 1.35rem;
+      line-height: 1.6;
+      color: #1e293b;
+      font-weight: 600;
+      margin-bottom: 40px;
+    }
+
+    .about-split-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+      text-align: left;
+      margin-top: 30px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 40px;
+    }
+
+    .about-split-grid h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem;
+      color: #002B49;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .about-split-grid p {
+      color: #475569;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* MEDIA SECTION STYLING FROM image_a25860.jpg */
+    .media-main-banner {
+      width: 100%;
+      height: 480px;
+      background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), 
+                  url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .media-badge-icon {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      width: 75px;
+      height: 75px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .media-badge-icon svg {
+      width: 40px;
+      height: 40px;
+      fill: #00aeef;
+    }
+
+    .media-grid-container {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    .events-historical-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .event-history-card {
+      background: #ffffff;
+      text-align: center;
+    }
+
+    .event-history-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .event-history-card h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.25rem;
+      color: #111111;
+      font-weight: 600;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+
+    /* MAILING LIST PANEL FROM image_a25c48.png */
+    .newsletter-section {
+      background-color: #1a1a1a;
+      color: white;
+      padding: 60px 10%;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .newsletter-container {
+      max-width: 650px;
+    }
+
+    .newsletter-title {
+      font-size: 2.5rem;
+      color: #00aeef;
+      font-weight: 700;
+      margin-bottom: 15px;
+      letter-spacing: -0.5px;
+    }
+
+    .newsletter-subtitle {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      margin-bottom: 30px;
+    }
+
+    .news-group {
+      margin-bottom: 20px;
+    }
+
+    .news-label {
+      display: block;
+      font-size: 0.95rem;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .news-input {
+      width: 100%;
+      max-width: 450px;
+      padding: 12px;
+      border: none;
+      background-color: #f8fafc;
+      font-size: 1rem;
+      color: #111;
+    }
+
+    .news-checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 25px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .news-checkbox-row input {
+      margin-top: 4px;
+    }
+
+    .subscribe-btn {
+      background: transparent;
+      border: 1px solid white;
+      color: white;
+      padding: 10px 30px;
+      font-size: 1rem;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .subscribe-btn:hover {
+      background: white;
+      color: #1a1a1a;
+    }
+
+    /* DARK BLUE FOOTER FROM image_a26ead.png */
+    .danforth-brand-footer {
+      background-color: #002b49; 
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      color: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    .footer-copyright {
+      font-weight: 400;
+    }
+
+    .footer-social-wrapper {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .social-icon-link {
+      color: #ffffff;
+      font-size: 1.3rem;
+      text-decoration: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+    }
+
+    .social-icon-link:hover {
+      opacity: 0.85;
+      transform: scale(1.08);
+    }
+
+    .social-icon-link.fa-facebook { background-color: #3b5998; }
+    .social-icon-link.fa-x-twitter { background-color: #1da1f2; }
+    .social-icon-link.fa-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+    .social-icon-link.fa-tiktok { background-color: #000000; }
+    .social-icon-link.fa-youtube { background-color: #ff0000; }
+
+    @media (max-width: 600px) {
+      .danforth-brand-footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        padding: 20px;
+      }
+    }
+
+    .info-grid {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .info-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      border: 1px solid #e2e8f0;
+      border-top: 5px solid #002B49;
+    }
+
+    .time-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #334155;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    /* PRESS RELEASE MODAL OVERLAY */
+    .press-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .press-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .press-modal-window {
+      background: #ffffff;
+      width: 90%;
+      max-width: 800px;
+      max-height: 85vh;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-top: 8px solid #002B49;
+    }
+
+    .press-modal-header {
+      padding: 20px 30px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .press-modal-header h3 {
+      color: #002B49;
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
+
+    .close-press-btn {
+      background: transparent;
+      border: none;
+      font-size: 2rem;
+      color: #64748b;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .press-modal-body {
+      padding: 40px 30px;
+      overflow-y: auto;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #334155;
+    }
+
+    .press-meta {
+      font-size: 0.9rem;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .press-headline {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.2;
+      margin-bottom: 5px;
+    }
+
+    .press-subheadline {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #00aeef;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header class="danforth-header">
+    <div class="brand-title">
+      <h1>GREEKTOWN</h1>
+      <p>Taste of the Danforth 2026</p>
+    </div>
+    <nav class="nav-links">
+      <a href="#" id="nav-taste-trigger" style="color: #00aeef; font-weight: 700;">Taste of the Danforth 2026</a>
+      <a href="#" id="nav-home-btn" class="active">Home</a>
+      <a href="#" id="nav-about-btn">About Us</a>
+      <a href="#" id="nav-media-btn">Media</a>
+      <a href="apply.html">Vendor Applications</a>
+    </nav>
+  </header>
+
+  <!-- VIEW PANEL 1: HOME PAGE -->
+  <div id="home-view-wrapper" class="dynamic-view-panel view-active">
+    <section class="flavours-hero">
+      <div class="flavours-overlay-box">
+        <h2 class="flavours-text">
+          Experience the World <br>
+          of <span class="big-word">Flavours</span> <br>
+          that await you
+        </h2>
+      </div>
+    </section>
+
+    <main class="info-grid">
+      <div class="info-card">
+        <span class="time-badge" style="color: #002B49; background: #e0f2fe;">Day 1</span>
+        <h3>Friday, August 7</h3>
+        <p style="margin-bottom: 15px; font-weight: 600; color: #64748b;">⏱️ 6:00 PM – Midnight</p>
+        <p style="font-size: 0.95rem; line-height: 1.5;">Festival street layout opens to the public. Live entertainment begins across all regional music stages starting at 6:00 PM sharp.</p>
+      </div>
+
+      <div class="info-card" style="border-top-color: #00aeef;">
+        <span class="time-badge" style="color: #0077a4; background: #e0f7ff;">Day 2</span>
+        <h3>Saturday, August 8</h3>
+        <p style="margin-bottom: 15px; font-weight: 600; color: #64748b;">⏱️ Noon – Midnight</p>
+        <p style="font-size: 0.95rem; line-height: 1.5;">Full daytime operations. Enjoy affordable tasting menus from participating local restaurants, cultural performances, and family sports zones.</p>
+      </div>
+
+      <div class="info-card">
+        <span class="time-badge" style="color: #475569; background: #f1f5f9;">Day 3</span>
+        <h3>Sunday, August 9</h3>
+        <p style="margin-bottom: 15px; font-weight: 600; color: #64748b;">⏱️ Noon – 10:00 PM</p>
+        <p style="font-size: 0.95rem; line-height: 1.5;">Final showcase day. Street market footprint remains active for family events and gourmet concessions up until evening wrap-up road clearances.</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- VIEW PANEL 2: ABOUT US -->
+  <div id="about-view-wrapper" class="dynamic-view-panel">
+    <div class="about-flag-banner"></div>
+    <div class="about-main-container">
+      <div class="about-bracket-header">&lt; About Us &gt;</div>
+      <p class="about-lead-p">
+        We are the largest Greek neighbourhood in North America and one of the most cosmopolitan areas of Toronto! Visit our part of town and experience a neighbourhood alive with interesting restaurants, boutiques, shops, markets, cafes, and a host of wonderful experiences. We invite you to experience our warm hospitality!
+      </p>
+
+      <div class="about-split-grid">
+        <div>
+          <h3>Who we are and what we do</h3>
+          <p>
+            One of Toronto’s most vibrant and cosmopolitan neighbourhoods, GreekTown is also one of the City’s best known Business Improvement Associations with over 400 members. Our clean and safe community offers something for everyone, with a wide array of restaurants, retail stores, services and cafes, all within easy walking distance from each other.
+          </p>
+        </div>
+        <div>
+          <h3>Take a bite out of GreekTown</h3>
+          <p>
+            Take a bite out of GreekTown by visiting one of our many restaurants, lounges, cafes, or bakeries that feature traditional Greek cuisine, along with the other multi-ethnic establishments in the area that offer a variety of tastes that will tantalize anyone’s taste buds. Come to the Danforth and enjoy a meal with the family, have a cocktail or two with friends and co-workers, or take a little bit of GreekTown home.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW PANEL 3: MEDIA HUB -->
+  <div id="media-view-wrapper" class="dynamic-view-panel">
+    <div class="media-main-banner">
+      <div class="media-badge-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      </div>
+    </div>
+
+    <div class="media-grid-container">
+      <div class="events-historical-grid">
+        <div class="event-history-card">
+          <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=500&q=80" alt="Winter Events">
+          <h4>Winter in GreekTown 2019</h4>
+        </div>
+        <div class="event-history-card">
+          <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=500&q=80" alt="Taste of Danforth 2019">
+          <h4>Taste of the Danforth 2019</h4>
+        </div>
+        <div class="event-history-card">
+          <img src="https://images.unsplash.com/photo-1502224562085-639556652f33?auto=format&fit=crop&w=500&q=80" alt="Marathon Events">
+          <h4>Scotiabank Toronto Waterfront Marathon 2019 Events</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOBAL MAILING LIST PANEL MATCHING image_a25c48.png -->
+  <section class="newsletter-section" id="newsletter-form-section">
+    <div class="newsletter-container">
+      <h2 class="newsletter-title">Subscribe to our mailing list!</h2>
+      <p class="newsletter-subtitle">
+        Stay up-to-date on what's happening at GreekTown on the Danforth BIA. We respect your privacy.
+      </p>
+
+      <form id="newsletter-form">
+        <div class="news-group">
+          <label class="news-label">First name or full name</label>
+          <input type="text" id="subscriber-name" class="news-input" required>
+        </div>
+
+        <div class="news-group">
+          <label class="news-label">Email</label>
+          <input type="email" id="subscriber-email" class="news-input" required>
+        </div>
+
+        <div class="news-checkbox-row">
+          <input type="checkbox" id="privacy-policy-check" required>
+          <label for="privacy-policy-check">By continuing, you accept the privacy policy</label>
+        </div>
+
+        <button type="submit" class="subscribe-btn">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- PRESS RELEASE MODAL -->
+  <div class="press-modal-overlay" id="press-release-modal">
+    <div class="press-modal-window">
+      <div class="press-modal-header">
+        <h3>Official BIA Media Hub</h3>
+        <button class="close-press-btn" id="close-press-trigger">&times;</button>
+      </div>
+      <div class="press-modal-body">
+        <h2 class="press-headline">Press Release: Taste of the Danforth Returns August 7, 8 & 9, 2026</h2>
+        <div class="press-meta">Jun 26, 2026 | Media</div>
+        <p>The GreekTown on the Danforth BIA is proud to announce the return of the festival on August 7th, 8th and 9th, 2026...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRAND FOOTER REFERENCING DESIGN IN image_a26ead.png -->
+  <footer class="danforth-brand-footer">
+    <div class="footer-copyright">
+      Copyright © 2026 - GreekTown on the Danforth
+    </div>
+    <div class="footer-social-wrapper">
+      <a href="https://www.facebook.com/GreektownTorontotowndom/" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-facebook" title="Facebook"></a>
+      <a href="https://x.com/greektowntoroto" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-x-twitter" title="Twitter"></a>
+      <a href="https://www.instagram.com/greektowntoronto/" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-instagram" title="Instagram"></a>
+      <a href="https://www.tiktok.com/@greektowntoronto" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-tiktok" title="TikTok"></a>
+      <a href="https://www.youtube.com/@greektowntorontobia" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-youtube" title="YouTube"></a>
+    </div>
+  </footer>
+
+  <!-- 🚀 STEP 2: EMBEDDED ENGINE FULLY MAPPED TO YOUR PROJECT CONFIGURATION -->
+  <script>
+    // ==========================================
+    // 🔌 LIVE ACTIVE FIREBASE WEB KEY INJECTION
+    // ==========================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGCAlyiTtcxXnBjysKKX-8eHQUNa_0VEM",
+      authDomain: "taste-of-the-danforth-2026.firebaseapp.com",
+      projectId: "taste-of-the-danforth-2026",
+      storageBucket: "taste-of-the-danforth-2026.firebasestorage.app",
+      messagingSenderId: "976691840935",
+      appId: "1:976691840935:web:cadeb5f4d77c0c41e45882",
+      measurementId: "G-T4DK6S1C5K"
+    };
+
+    // Initialize Connection Framework via Global CDN Window Handlers
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // UI View Management Elements
+    const modal = document.getElementById('press-release-modal');
+    const openBtn = document.getElementById('nav-taste-trigger');
+    const closeBtn = document.getElementById('close-press-trigger');
+
+    const homeView = document.getElementById('home-view-wrapper');
+    const aboutView = document.getElementById('about-view-wrapper');
+    const mediaView = document.getElementById('media-view-wrapper');
+    
+    const homeBtn = document.getElementById('nav-home-btn');
+    const aboutBtn = document.getElementById('nav-about-btn');
+    const mediaBtn = document.getElementById('nav-media-btn');
+    
+    const newsletterForm = document.getElementById('newsletter-form');
+
+    // Tab Interface Multi-page Router System
+    function setRoute(targetView, activeBtn) {
+      [homeView, aboutView, mediaView].forEach(view => view.classList.remove('view-active'));
+      [homeBtn, aboutBtn, mediaBtn].forEach(btn => btn.classList.remove('active'));
+      
+      targetView.classList.add('view-active');
+      activeBtn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    aboutBtn.addEventListener('click', (e) => { e.preventDefault(); setRoute(aboutView, aboutBtn); });
+    homeBtn.addEventListener('click', (e) => { e.preventDefault(); setRoute(homeView, homeBtn); });
+    mediaBtn.addEventListener('click', (e) => { e.preventDefault(); setRoute(mediaView, mediaBtn); });
+
+    openBtn.addEventListener('click', (e) => { e.preventDefault(); modal.classList.add('active'); });
+    closeBtn.addEventListener('click', () => { modal.classList.remove('active'); });
+    window.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+
+    // ==========================================
+    // 📩 CAPTURE DATA AND PUSH TO FIREBASE LIVE
+    // ==========================================
+    newsletterForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nameValue = document.getElementById('subscriber-name').value;
+      const emailValue = document.getElementById('subscriber-email').value;
+
+      console.log("Pushing data record to Firestore database collection...", { nameValue, emailValue });
+
+      // Save directly into the "subscribers" collection on Firebase
+      db.collection("subscribers").add({
+        fullName: nameValue,
+        emailAddress: emailValue,
+        subscribedAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then((docRef) => {
+        console.log("Document successfully written with ID reference token: ", docRef.id);
+        alert("Success! Thank you for subscribing to our mailing list!");
+        newsletterForm.reset();
+      })
+      .catch((error) => {
+        console.error("Firebase Database Write Error: ", error);
+        alert("Database connection failed. Please ensure your Firestore security rules are set to public testing.");
+      });
+    });
+  </script>
+</body>
+</html>

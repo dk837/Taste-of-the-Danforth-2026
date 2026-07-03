@@ -3,122 +3,622 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vendor Registration | Taste of the Danforth</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <title>Taste of the Danforth 2026 | Vendor Application</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Load FontAwesome for clean social icon rendering -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- FIREBASE COMPATIBILITY LIBRARIES -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
   <link rel="stylesheet" href="style.css">
+  <style>
+    .app-hero {
+      background: linear-gradient(rgba(0, 2, 35, 0.45), rgba(0, 2, 35, 0.45)), 
+                  url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      padding: 60px 20px;
+      text-align: center;
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .app-hero h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .app-hero p {
+      font-size: 1.1rem;
+      font-family: 'Inter', sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      color: #e2e8f0;
+    }
+
+    .form-container {
+      max-width: 750px;
+      margin: -40px auto 60px auto;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      border-top: 6px solid #002B49;
+      font-family: 'Inter', sans-serif;
+      position: relative;
+      z-index: 10;
+    }
+
+    .form-section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.3rem;
+      color: #002B49;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 8px;
+      font-weight: 700;
+      margin-top: 25px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 600px) {
+      .form-group.full-width { grid-column: span 1; }
+    }
+
+    .form-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #00aeef;
+      background: #ffffff;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .checkbox-group input {
+      margin-top: 3px;
+    }
+
+    /* AUTOMATIC LIVE BALANCE DISPLAY PANEL */
+    .fee-summary-panel {
+      background-color: #f8fafc;
+      border: 1px dashed #002B49;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+
+    .fee-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+
+    .fee-row.total-row {
+      border-top: 1px solid #cbd5e1;
+      padding-top: 10px;
+      margin-top: 10px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #002B49;
+    }
+
+    .submit-btn-wrapper {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .app-submit-btn {
+      background-color: #002B49;
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .app-submit-btn:hover {
+      background-color: #00aeef;
+    }
+
+    .app-submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* DARK BLUE FOOTER */
+    .danforth-brand-footer {
+      background-color: #002b49; 
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      color: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    .footer-copyright { font-weight: 400; }
+
+    .footer-social-wrapper {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .social-icon-link {
+      color: #ffffff;
+      font-size: 1.3rem;
+      text-decoration: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+    }
+
+    .social-icon-link:hover {
+      opacity: 0.85;
+      transform: scale(1.08);
+    }
+
+    .social-icon-link.fa-facebook { background-color: #3b5998; }
+    .social-icon-link.fa-x-twitter { background-color: #1da1f2; }
+    .social-icon-link.fa-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+    .social-icon-link.fa-tiktok { background-color: #000000; }
+    .social-icon-link.fa-youtube { background-color: #ff0000; }
+
+    /* CUSTOM PAYMENT DETAILS POP-UP MODAL OVERLAY */
+    .popup-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 2, 35, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .popup-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .popup-modal-card {
+      background: #ffffff;
+      width: 90%;
+      max-width: 520px;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      border-top: 8px solid #00aeef;
+      font-family: 'Inter', sans-serif;
+      text-align: center;
+      transform: scale(0.85);
+      transition: transform 0.3s ease;
+    }
+
+    .popup-modal-overlay.active .popup-modal-card {
+      transform: scale(1);
+    }
+
+    .popup-icon-check {
+      color: #10b981;
+      font-size: 3.5rem;
+      margin-bottom: 15px;
+    }
+
+    .popup-modal-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      color: #002B49;
+      font-size: 1.6rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+    }
+
+    .popup-modal-card p {
+      font-size: 1rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .payment-instructions-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 18px;
+      text-align: left;
+      margin-bottom: 25px;
+    }
+
+    .instruction-line {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      color: #1e293b;
+    }
+
+    .instruction-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .instruction-line strong {
+      color: #002B49;
+    }
+
+    .popup-close-btn {
+      background-color: #002B49;
+      color: white;
+      border: none;
+      padding: 12px 35px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      transition: background-color 0.2s;
+    }
+
+    .popup-close-btn:hover {
+      background-color: #00aeef;
+    }
+
+    @media (max-width: 600px) {
+      .danforth-brand-footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navigation Blueprint -->
+  <!-- Header Section -->
   <header class="danforth-header">
     <div class="brand-title">
       <h1>GREEKTOWN</h1>
       <p>Taste of the Danforth 2026</p>
     </div>
     <nav class="nav-links">
-      <a href="#">Home</a>
-      <a href="#">Art & Events</a>
-      <a href="#" class="active">Vendor Applications</a>
+      <a href="index.html" style="color: #00aeef; font-weight: 700;">Taste of the Danforth 2026</a>
+      <a href="index.html">Home</a>
+      <a href="index.html">About Us</a>
+      <a href="index.html">Media</a>
+      <a href="apply.html" class="active">Vendor Applications</a>
     </nav>
   </header>
 
-  <!-- Split Panel Core Architecture -->
-  <main class="split-container">
-    
-    <!-- Left Informational Hub -->
-    <section class="info-panel">
-      <span class="badge">Open Admissions</span>
-      <h2 class="display-title">Street Footprint Allocation Engine</h2>
-      <p style="line-height: 1.6; color: #475569;">
-        Select your required physical presence footprint below. Applications route into our isolated database architecture to reserve space on the Danforth street grid.
-      </p>
+  <section class="app-hero">
+    <h2>Vendor Registration Port</h2>
+    <p>Join over 1.5 million guests and showcase your flavors, crafts, or commercial services at Canada's premier street festival.</p>
+  </section>
 
-      <div class="tier-toggle-stack">
-        <div class="toggle-card active" id="mode-popup">
-          <h4>Standard Pop-up / Artisan Unit</h4>
-          <p>For independent merchandise vendors, street artists, and retail brands.</p>
-        </div>
-        <div class="toggle-card" id="mode-truck">
-          <h4>Mobile Food Truck Rig</h4>
-          <p>For heavy concessions requiring custom layout clearances and high-power hydro integration.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Right Interaction Form -->
-    <section class="form-panel">
-      <div class="app-card">
-        <h3 style="margin-bottom: 25px; font-weight: 900; font-size: 1.4rem;" id="form-title">Pop-up Plot Allocation</h3>
+  <main>
+    <div class="form-container">
+      <form id="vendor-application-form">
         
-        <form id="danforth-application-form">
-          <div class="input-group">
-            <label>Business / Concept Title</label>
-            <input type="text" id="vendor-name" class="form-input" placeholder="e.g., Athenian Street Treats" required>
+        <div class="form-section-title">Business Information</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Business Name</label>
+            <input type="text" id="vendor-biz-name" class="form-input" required>
           </div>
-
-          <div class="input-group">
-            <label>Contact Email</label>
-            <input type="email" id="vendor-email" class="form-input" placeholder="management@brand.com" required>
+          <div class="form-group">
+            <label class="form-label">Contact Full Name</label>
+            <input type="text" id="vendor-contact-name" class="form-input" required>
           </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="vendor-email" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" id="vendor-phone" class="form-input" placeholder="(416) 000-0000" required>
+          </div>
+        </div>
 
-          <div class="input-group">
-            <label>Footprint Size Preference</label>
-            <select id="vendor-tier" class="form-input" required>
-              <option value="1200">Standard Footprint — 10' x 10' ($1,200.00)</option>
-              <option value="2400">Expanded Footprint — 10' x 20' ($2,400.00)</option>
-              <option value="4800">Large Marketplace Block — 20' x 20' ($4,800.00)</option>
+        <div class="form-section-title">Space & Logistics</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">1. Vendor Category</label>
+            <select id="vendor-category" class="form-select" required>
+              <option value="" disabled selected>Select category...</option>
+              <option value="bia-member">Greektown & Broadview Danforth BIA Member</option>
+              <option value="external-commercial">Independent & External Commercial Vendor</option>
+              <option value="deca-zone">Danforth East Community Association (DECA) Zone</option>
             </select>
           </div>
-
-          <!-- Price Display Output Card -->
-          <div class="summary-invoice">
-            <h5>Required Fee:</h5>
-            <div class="price" id="invoice-total">$1,200.00</div>
+          <div class="form-group">
+            <label class="form-label">2. Space Requirements & Fees</label>
+            <select id="vendor-space" class="form-select" required disabled>
+              <option value="" disabled selected>Please select a category first...</option>
+            </select>
           </div>
+          <div class="form-group full-width">
+            <label class="form-label">Describe Menu Items or Menu Presentation</label>
+            <textarea id="vendor-description" class="form-textarea" rows="3" placeholder="Provide a quick summary of what items you intend to sell/display..." required></textarea>
+          </div>
+        </div>
 
-          <button type="submit" class="submit-btn">Submit Application Structure</button>
-        </form>
-      </div>
-    </section>
+        <div class="form-section-title">Requirements & Approvals</div>
+        <div class="form-group">
+          <div class="checkbox-group">
+            <input type="checkbox" id="power-req">
+            <label for="power-req" class="form-label" style="font-weight: 400;">I require dedicated festival hydro hookups (+$150 utility surcharge).</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="insurance-confirm" required>
+            <label for="insurance-confirm" class="form-label" style="font-weight: 400;">I acknowledge that all active vendors must file a valid City of Toronto Public Health Permit and provide proof of Commercial General Liability insurance naming the BIA as additionally insured before layout entry.</label>
+          </div>
+        </div>
+
+        <!-- LIVE FEE CALCULATOR PANEL (CALCULATES ON FOOTPRINT CHOSEN) -->
+        <div class="form-section-title">Application Statement Summary</div>
+        <div class="fee-summary-panel">
+          <div class="fee-row">
+            <span>Selected Space Footprint Fee:</span>
+            <span id="display-base-fee">$0.00 CAD</span>
+          </div>
+          <div class="fee-row">
+            <span>Hydro Hookup Surcharge:</span>
+            <span id="display-hydro-fee">$0.00 CAD</span>
+          </div>
+          <div class="fee-row total-row">
+            <span>Calculated Total Balance Due:</span>
+            <span id="display-total-fee">$0.00 CAD</span>
+          </div>
+        </div>
+
+        <div class="submit-btn-wrapper">
+          <button type="submit" class="app-submit-btn">Submit Application Packet</button>
+        </div>
+      </form>
+    </div>
   </main>
 
+  <!-- CUSTOM MODAL INLINE STRUCTURE -->
+  <div id="success-payment-modal" class="popup-modal-overlay">
+    <div class="popup-modal-card">
+      <div class="popup-icon-check"><i class="fa-solid fa-circle-check"></i></div>
+      <h3>Application Received!</h3>
+      <p>Your application parameters have been successfully written to the festival database cloud ledger.</p>
+      
+      <div class="payment-instructions-box">
+        <div class="instruction-line">⚠️ <strong>Deadline:</strong> Payment to be done within 3 business days.</div>
+        <div class="instruction-line">💸 <strong>Payment Method:</strong> E-transfer</div>
+        <div class="instruction-line">📧 <strong>Send To Email:</strong> biagreektowntoronto@gmail.com</div>
+        <div class="instruction-line">🔑 <strong>Security Answer:</strong> <span id="dynamic-security-answer" style="color: #00aeef; font-weight: 700;"></span></div>
+      </div>
+
+      <button id="close-modal-btn" class="popup-close-btn">Close & Reset</button>
+    </div>
+  </div>
+
+  <!-- BRAND FOOTER -->
+  <footer class="danforth-brand-footer">
+    <div class="footer-copyright">
+      Copyright © 2026 - GreekTown on the Danforth
+    </div>
+    <div class="footer-social-wrapper">
+      <a href="https://www.facebook.com/GreektownDanforthBIA/" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-facebook" title="Facebook"></a>
+      <a href="https://x.com/GreekTownBIA" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-x-twitter" title="Twitter"></a>
+      <a href="https://www.instagram.com/greektown_danforthbia/" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-instagram" title="Instagram"></a>
+      <a href="https://www.tiktok.com/tag/tasteofthedanforth" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-tiktok" title="TikTok"></a>
+      <a href="https://www.youtube.com/results?search_query=taste+of+the+danforth" target="_blank" rel="noopener" class="social-icon-link fa-brands fa-youtube" title="YouTube"></a>
+    </div>
+  </footer>
+
+  <!-- DATA PIPELINE & DYNAMIC FILTER SCRIPT -->
   <script>
-    const modePopup = document.getElementById('mode-popup');
-    const modeTruck = document.getElementById('mode-truck');
-    const formTitle = document.getElementById('form-title');
-    const vendorTier = document.getElementById('vendor-tier');
-    const invoiceTotal = document.getElementById('invoice-total');
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGCAlyiTtcxXnBjysKKX-8eHQUNa_0VEM",
+      authDomain: "taste-of-the-danforth-2026.firebaseapp.com",
+      projectId: "taste-of-the-danforth-2026",
+      storageBucket: "taste-of-the-danforth-2026.firebasestorage.app",
+      messagingSenderId: "976691840935",
+      appId: "1:976691840935:web:cadeb5f4d77c0c41e45882",
+      measurementId: "G-T4DK6S1C5K"
+    };
 
-    // Manage Switch Transformations
-    modePopup.addEventListener('click', () => {
-      modePopup.classList.add('active');
-      modeTruck.classList.remove('active');
-      formTitle.innerText = "Pop-up Plot Allocation";
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const appForm = document.getElementById('vendor-application-form');
+    const categorySelect = document.getElementById('vendor-category');
+    const spaceSelect = document.getElementById('vendor-space');
+    const powerCheckbox = document.getElementById('power-req');
+    
+    // Popup Modal Constants
+    const paymentModal = document.getElementById('success-payment-modal');
+    const modalSecurityText = document.getElementById('dynamic-security-answer');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+
+    // Structured category option database maps
+    const categoryOptions = {
+      "bia-member": [
+        { value: "BIA Food", text: "Food Business / Restaurant Space — $1,000.00 CAD", price: 1000 },
+        { value: "BIA Retail", text: "Retailer / Non-Food Business Space — $200.00 CAD", price: 200 }
+      ],
+      "external-commercial": [
+        { value: "External 10x10", text: "10ft x 10ft Booth Space — $1,200.00 CAD", price: 1200 },
+        { value: "External 10x20", text: "10ft x 20ft Booth Space — $2,400.00 CAD", price: 2400 },
+        { value: "External 20x20", text: "20ft x 20ft Booth Space — $4,800.00 CAD", price: 4800 }
+      ],
+      "deca-zone": [
+        { value: "DECA Food Vendor", text: "Standard Food Vendor (10ft x 10ft) — $275.00 CAD", price: 275 },
+        { value: "DECA Handcrafted", text: "Handmade Artists & Crafters — $225.00 CAD", price: 225 },
+        { value: "DECA Food Cart", text: "Mobile Food Cart (Dickie-Dee style) — $135.00 CAD", price: 135 }
+      ]
+    };
+
+    const HYDRO_SURCHARGE = 150;
+    let currentBaseFee = 0;
+    let currentHydroFee = 0;
+    let currentTotalFee = 0;
+
+    // Filter Space choices based on Category Selection
+    categorySelect.addEventListener('change', function() {
+      const selectedCategory = categorySelect.value;
       
-      vendorTier.innerHTML = `
-        <option value="1200">Standard Footprint — 10' x 10' ($1,200.00)</option>
-        <option value="2400">Expanded Footprint — 10' x 20' ($2,400.00)</option>
-        <option value="4800">Large Marketplace Block — 20' x 20' ($4,800.00)</option>
-      `;
-      invoiceTotal.innerText = "$1,200.00";
+      // Clear original options
+      spaceSelect.innerHTML = '<option value="" disabled selected>Select dynamic footprint...</option>';
+      
+      if (categoryOptions[selectedCategory]) {
+        categoryOptions[selectedCategory].forEach(opt => {
+          const newOption = document.createElement('option');
+          newOption.value = opt.value;
+          newOption.text = opt.text;
+          newOption.dataset.price = opt.price;
+          spaceSelect.appendChild(newOption);
+        });
+        spaceSelect.disabled = false;
+      } else {
+        spaceSelect.disabled = true;
+      }
+      
+      resetFees();
     });
 
-    modeTruck.addEventListener('click', () => {
-      modeTruck.classList.add('active');
-      modePopup.classList.remove('active');
-      formTitle.innerText = "Mobile Concession Assignment";
+    function resetFees() {
+      currentBaseFee = 0;
+      currentHydroFee = 0;
+      currentTotalFee = 0;
+      updateUI();
+    }
+
+    function calculateFees() {
+      const selectedOption = spaceSelect.options[spaceSelect.selectedIndex];
       
-      vendorTier.innerHTML = `
-        <option value="1850">Standard Truck Slot (Hydro Hookup) ($1,850.00)</option>
-        <option value="3500">Premium Intersection Plot ($3,500.00)</option>
-      `;
-      invoiceTotal.innerText = "$1,850.00";
+      if (selectedOption && selectedOption.dataset.price) {
+        currentBaseFee = parseInt(selectedOption.dataset.price);
+      } else {
+        currentBaseFee = 0;
+      }
+
+      currentHydroFee = powerCheckbox.checked ? HYDRO_SURCHARGE : 0;
+      currentTotalFee = currentBaseFee + currentHydroFee;
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('display-base-fee').innerText = `$${currentBaseFee.toLocaleString()}.00 CAD`;
+      document.getElementById('display-hydro-fee').innerText = `$${currentHydroFee.toLocaleString()}.00 CAD`;
+      document.getElementById('display-total-fee').innerText = `$${currentTotalFee.toLocaleString()}.00 CAD`;
+    }
+
+    spaceSelect.addEventListener('change', calculateFees);
+    powerCheckbox.addEventListener('change', calculateFees);
+
+    appForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const bizName = document.getElementById('vendor-biz-name').value;
+      const contactName = document.getElementById('vendor-contact-name').value;
+      const email = document.getElementById('vendor-email').value;
+      const phone = document.getElementById('vendor-phone').value;
+      const category = categorySelect.options[categorySelect.selectedIndex].text;
+      const space = spaceSelect.value;
+      const description = document.getElementById('vendor-description').value;
+
+      if (!space) {
+        alert("Please choose a space configuration option to finish processing.");
+        return;
+      }
+
+      db.collection("vendor_applications").add({
+        businessName: bizName,
+        contactPerson: contactName,
+        emailAddress: email,
+        phoneNumber: phone,
+        vendorCategory: category,
+        spaceSelection: space,
+        boothDescription: description,
+        requiresHydro: powerCheckbox.checked,
+        financials: {
+          baseBoothFee: currentBaseFee,
+          hydroSurcharge: currentHydroFee,
+          totalAssessedFee: currentTotalFee
+        },
+        submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then((docRef) => {
+        console.log("Record generated safely: ", docRef.id);
+        
+        // Populate and display the pop-up modal panel dynamically
+        modalSecurityText.innerText = bizName;
+        paymentModal.classList.add('active');
+      })
+      .catch((error) => {
+        console.error("Pipeline error: ", error);
+        alert("Firestore submission failed. Check your cloud rules setup parameters.");
+      });
     });
 
-    // Update Totals on Select Change
-    vendorTier.addEventListener('change', () => {
-      const numericValue = Number(vendorTier.value);
-      invoiceTotal.innerText = `$${numericValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    // Handle closing modal box safely & clearing input criteria
+    closeModalBtn.addEventListener('click', function() {
+      paymentModal.classList.remove('active');
+      appForm.reset();
+      spaceSelect.disabled = true;
+      spaceSelect.innerHTML = '<option value="" disabled selected>Please select a category first...</option>';
+      resetFees();
     });
   </script>
 </body>
